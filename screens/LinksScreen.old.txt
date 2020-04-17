@@ -1,0 +1,226 @@
+//import React from 'react';
+import { ScrollView } from 'react-native';
+import { Platform, StyleSheet, Text, View, Button, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { ExpoLinksView } from '@expo/samples';
+import React, { useState, useEffect } from 'react';
+import { nullLiteral } from '@babel/types';
+
+export default function LinksScreen() {
+    const [formulaValue, setFormulaValue] = useState('Starting App');
+    const [data, updateData] = useState("cc");
+    const [doctorList, updateDoctors] = useState([]);
+    const doctors =
+        [{ "physician": "Ed Soumi" }, { "physician": "John Soumi" }, { "physician": "Matthew Pham" }];
+
+    const setMessage = (msg) => {
+        setFormulaValue(msg);
+    }
+
+    const useFetch = (url) => {
+        //const [data, updateData] = useState(undefined);
+        // empty array as second argument equivalent to componentDidMount
+        async function fetchData() {
+            const response = await fetch(url);
+            const json = await response.json();
+            updateDoctors(json);
+            console.log("type of variable is: " + data);
+            updateData("xxx");
+            console.log("type of variable is: " + doctorList);
+        }
+        useEffect(() => {
+            fetchData();
+        }, [])
+
+        //console.log("type of variable is: " + { data });
+
+        //if (data != undefined) {
+        // console.log("type of variable is: " + data)
+        //}
+
+        return data;
+    };
+
+    //}
+    //let result = JSON.parse({ data });
+    //console.log("type of variable is: " + data);
+    /*
+        if (data != undefined) {
+      console.log("type of variable is: " + data)
+      return data;
+    }
+    else return null;
+    */
+
+
+    const App = () => {
+        const URL = 'https://desolate-shelf-9039.herokuapp.com/getphysicians';
+        //const result = useFetch(URL);
+        //const result2 = JSON.parse(result);
+        //alert(doctors.length + " " + doctors[0].physician);
+        return (
+            <View>
+                <Text style={styles.TextStyle}>
+                    {doctors[0].physician}
+                </Text>
+                <Text style={styles.TextStyle}>
+                    {doctors[1].physician}
+                </Text>
+                <Text style={styles.TextStyle}>
+                    {doctors[2].physician}
+                </Text>
+            </View>
+        )
+    }
+
+    return (
+        <ScrollView style={styles.container}>
+            {/**
+       * Go ahead and delete ExpoLinksView and replace it with your content;
+       * we just wanted to provide you with some helpful links.
+       */}
+            <TextInput style={styles.FormulaButtonStyle}>
+                {formulaValue}
+            </TextInput>
+            <FetchData />
+        </ScrollView>
+    );
+}
+
+LinksScreen.navigationOptions = {
+    title: 'Links',
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingTop: 15,
+        backgroundColor: '#03fc3d'
+    },
+    instructions: {
+        fontSize: 18,
+        textAlign: 'center',
+        height: 60,
+        color: '#333333'
+    },
+    FormulaButtonStyle: {
+        marginTop: 5,
+        paddingTop: 15,
+        paddingBottom: 15,
+        marginLeft: 30,
+        marginRight: 30,
+        backgroundColor: 'lightblue',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff',
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '500'
+    },
+    TextStyle: {
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '500'
+    },
+});
+
+
+function FetchData {
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await axios(
+                'https://desolate-shelf-9039.herokuapp.com/getphysicians',
+            );
+
+            setData(result.data);
+        };
+
+        fetchData();
+    }, []);
+
+    return (
+        <ul>
+            {data.hits.map(item => (
+                <li key={item.objectID}>
+                    <a href={item.url}>{item.title}</a>
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+/*
+
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+  const onButtonClick = () => {
+    // `current` points to the mounted text input element
+    inputEl.current.focus();
+  };
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
+    </>
+  );
+}
+
+ <View>
+          <Text style={styles.TextStyle}>
+            {doctors[0].physician}
+          </Text>
+          <Text style={styles.TextStyle}>
+            {doctors[1].physician}
+          </Text>
+          <Text style={styles.TextStyle}>
+            {doctors[2].physician}
+          </Text>
+        </View>
+  {JSON.stringify(doctors)}
+<ExpoLinksView />
+http://traders-inc.herokuapp.com/admin
+
+
+
+import React, { useState, useEffect } from 'react';
+
+const useFetch = (url) => {
+  const [data, updateData] = useState(undefined);
+
+  // empty array as second argument equivalent to componentDidMount
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(url);
+      const json = await response.json();
+      updateData(json);
+    }
+    fetchData();
+  }, [url]);
+
+  return data;
+};
+
+const App = () => {
+    const URL = 'http://traders-inc.herokuapp.com/admin';
+    const result = useFetch(URL);
+
+    return (
+      <div>
+        {JSON.stringify(result)}
+      </div>
+    );
+}
+
+
+function startLocalServer(port: number) {
+  const server = http.createServer((req, res) => {
+    res.end('Hello world!');
+  });
+  server.on('clientError', (err, socket) => {
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+  });
+  server.listen(port);
+  vscode.window.showInformationMessage(`Started local server on port: ${port}`);
+}
+*/
